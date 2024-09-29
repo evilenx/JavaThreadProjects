@@ -15,7 +15,6 @@ Este repositorio contiene una serie de proyectos y laboratorios enfocados en la 
 
 
 
-<hr>
 ## Uso
 
 Para utilizar estos proyectos, asegúrate de tener instalado el entorno de desarrollo de Java (JDK)
