@@ -63,6 +63,11 @@ public class Print extends JFrame {
                 if (thread != null) {
                     printsNumbers.stopPrinting();
                     outputArea.setText("");
+                    //disable the buttons
+                    clearButton.setEnabled(false);
+                    stopButton.setEnabled(false);
+                    pauseButton.setEnabled(false);
+                    resumeButton.setEnabled(false);
                 }
             }
         });
@@ -99,6 +104,10 @@ public class Print extends JFrame {
     private void startPrinting() {
         try {
             int sleepTime = Integer.parseInt(sleepTimeField.getText());
+            if (sleepTime < 0) {
+              JOptionPane.showMessageDialog(this, "Por favor, ingresa un número no negativo.", "Error", JOptionPane.ERROR_MESSAGE);
+              return;
+            }
             printsNumbers = new PrintsNumbers(sleepTime, outputArea);
             thread = new Thread(printsNumbers);
             thread.start();
