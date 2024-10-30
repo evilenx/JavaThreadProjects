@@ -53,5 +53,9 @@ public class PrintsNumbers implements Runnable {
                 }
             }
         }
+				Print.clearButton.setEnabled(true);
+				Print.stopButton.setEnabled(false);
+				Print.pauseButton.setEnabled(false);
+				Print.resumeButton.setEnabled(false);
     }
 }
