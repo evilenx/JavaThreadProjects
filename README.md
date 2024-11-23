@@ -12,6 +12,7 @@ Este repositorio contiene una serie de proyectos y laboratorios enfocados en la 
 |             -             | CarRaceGUI       |                                                                                                                                                                       |                                                      |
 |         TimerTask         |                  |                                                                                                                                                                       |                                                      |
 |     MatrizTranspuesta     | Tarea            | La transpuesta de una matriz es una nueva matriz creada intercambiando las filas y columnas de la matriz original.<br>                                                | ![Matriz Transpuesta](images/Matriz_Transpuesta.png) |
+|     Game                  | Sanke            | Crear un juego usando Threads.                                                                                                                                        | ![Matriz Transpuesta](images/Snake.png)              |
 
 
 
