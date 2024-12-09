@@ -12,7 +12,8 @@ Este repositorio contiene una serie de proyectos y laboratorios enfocados en la 
 |             -             | CarRaceGUI       |                                                                                                                                                                       |                                                      |
 |         TimerTask         |                  |                                                                                                                                                                       |                                                      |
 |     MatrizTranspuesta     | Tarea            | La transpuesta de una matriz es una nueva matriz creada intercambiando las filas y columnas de la matriz original.<br>                                                | ![Matriz Transpuesta](images/Matriz_Transpuesta.png) |
-|     Game                  | Snake| Crear un juego usando Threads.                                                                                                                                        | ![Matriz Transpuesta](images/Snake.png)              |
+|           Game            | Snake            | Crear un juego usando Threads.                                                                                                                                        |       ![Matriz Transpuesta](images/Snake.png)        |
+|          MS-Food          | Restaurante      | Restaurante con temática retro - windows 98                                                                                                                           |                ![Ms-Food](images/Ms-Food.png)                |
 
 
 
