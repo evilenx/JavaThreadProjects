@@ -1,3 +1,4 @@
+/*autor: Emanuel Avilés */
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ public class RetroFastFoodGUI {
     private static JTextArea orderDetailsArea; // Nuevo textarea para mostrar detalles
     private static JPanel menuPanel;
 
+    private static JPanel bottomPanel; // Declaración como variable de instancia
     public static void main(String[] args) {
         // Set up retro look and feel
         try {
@@ -27,14 +29,14 @@ public class RetroFastFoodGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 800); // Increased size to accommodate textarea
         frame.setLayout(new BorderLayout());
-        
+
         // Try to set icon, handle potential file not found
         try {
             frame.setIconImage(new ImageIcon("icons/hamburger_retro.png").getImage());
         } catch (Exception e) {
             System.out.println("Ícono no encontrado.");
         }
-        
+
         frame.setLocationRelativeTo(null);
 
         // Menu Bar
@@ -54,9 +56,9 @@ public class RetroFastFoodGUI {
         JMenuItem aboutItem = new JMenuItem("Acerca de");
 
         aboutItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, 
-                "Versión: 1.0.1\nAutor: Emanuel Avilés", 
-                "Acerca de MS-Food", 
+            JOptionPane.showMessageDialog(frame,
+                "Versión: 1.0.1\nAutor: Emanuel Avilés",
+                "Acerca de MS-Food",
                 JOptionPane.INFORMATION_MESSAGE);
         });
 
@@ -71,7 +73,7 @@ public class RetroFastFoodGUI {
 
         frame.setJMenuBar(menuBar);
 
-        
+
         // Toolbar
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
@@ -79,6 +81,35 @@ public class RetroFastFoodGUI {
         JButton saveButton = createToolbarButton("icons/save_icon.png", "Guardar Pedido", e -> saveOrder(frame));
         JButton loadButton = createToolbarButton("icons/load_icon.png", "Cargar Pedido", e -> loadOrder(frame));
         JButton exitButton = createToolbarButton("icons/exit_icon.png", "Salir", e -> System.exit(0));
+        
+
+        // Botón para deshacer el último elemento agregado
+        JButton undoButton = new JButton("Deshacer");
+        undoButton.setFont(new Font("MS Sans Serif", Font.BOLD, 12));
+        undoButton.setFocusPainted(false);
+        undoButton.addActionListener(e -> {
+            if (!orderItems.isEmpty()) {
+                // Elimina el último elemento y actualiza el total
+                String lastItem = orderItems.remove(orderItems.size() - 1);
+                String[] itemParts = lastItem.split(" - \\$");
+                try {
+                    double itemPrice = Double.parseDouble(itemParts[1]);
+                    total -= itemPrice;
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException ex) {
+                    JOptionPane.showMessageDialog(frame, "Error al deshacer el elemento.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                updateOrderDetails();
+                totalLabel.setText(String.format("Total: $%.2f", total));
+            } else {
+                JOptionPane.showMessageDialog(frame, "No hay elementos para deshacer.",
+                    "Aviso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+
+
+
 
         toolBar.add(saveButton);
         toolBar.add(loadButton);
@@ -93,8 +124,13 @@ public class RetroFastFoodGUI {
         //frame.add(title);
         // Título en la barra de herramientas
         JLabel title = new JLabel("¡Bienvenido a MS-Food!", SwingConstants.CENTER);
-        title.setFont(new Font("MS Sans Serif", Font.BOLD, 20));
+        title.setFont(new Font("MS Sans Serif", Font.BOLD, 16));
         title.setForeground(Color.BLACK);
+        title.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Espaciado alrededor
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBackground(toolBar.getBackground()); // Igualar fondo a la barra de herramientas
+        titlePanel.add(title, BorderLayout.CENTER);
+        toolBar.add(titlePanel, BorderLayout.CENTER);
         toolBar.add(title);
 
 
@@ -117,11 +153,11 @@ public class RetroFastFoodGUI {
         };
 
         double[] prices = {
-            5.99, 6.99, 8.99, 
-            2.99, 1.99, 2.49, 
-            7.49, 4.99, 6.99, 5.49, 
-            2.49, 3.99, 2.99, 3.49, 
-            4.99, 5.99, 3.99, 4.49, 
+            5.99, 6.99, 8.99,
+            2.99, 1.99, 2.49,
+            7.49, 4.99, 6.99, 5.49,
+            2.49, 3.99, 2.99, 3.49,
+            4.99, 5.99, 3.99, 4.49,
             3.99, 2.99, 3.99, 6.99
         };
 
@@ -137,28 +173,28 @@ public class RetroFastFoodGUI {
         */
 
         ImageIcon[] icons = {
-            new ImageIcon("icons/hamburger_retro.png"), 
+            new ImageIcon("icons/hamburger_retro.png"),
             new ImageIcon("icons/cheeseburger_retro.png"),
-            new ImageIcon("icons/doubleburger_retro.png"), 
+            new ImageIcon("icons/doubleburger_retro.png"),
             new ImageIcon("icons/fries_retro.png"),
-            new ImageIcon("icons/soda_small_retro.png"), 
+            new ImageIcon("icons/soda_small_retro.png"),
             new ImageIcon("icons/soda_large_retro.png"),
-            new ImageIcon("icons/burrito.png"), 
+            new ImageIcon("icons/burrito.png"),
             new ImageIcon("icons/taco.png"),
-            new ImageIcon("icons/pizza_01.png"), 
+            new ImageIcon("icons/pizza_01.png"),
             new ImageIcon("icons/hot_dog_01.png"),
-            new ImageIcon("icons/cookie_chocolate_chip.png"), 
+            new ImageIcon("icons/cookie_chocolate_chip.png"),
             new ImageIcon("icons/cupcake.png"),
-            new ImageIcon("icons/doughnut.png"), 
+            new ImageIcon("icons/doughnut.png"),
             new ImageIcon("icons/oaty_cake.png"),
-            new ImageIcon("icons/shake.png"), 
+            new ImageIcon("icons/shake.png"),
             new ImageIcon("icons/ice_cream_sundae_02.png"),
-            new ImageIcon("icons/orange_juice.png"), 
+            new ImageIcon("icons/orange_juice.png"),
             new ImageIcon("icons/strawberry_smoothie.png"),
-            new ImageIcon("icons/waffle.png"), 
+            new ImageIcon("icons/waffle.png"),
             new ImageIcon("icons/popsicle.png"),
             new ImageIcon("icons/ice_cream_bar_02.png"),
-            new ImageIcon("icons/chicken.png") 
+            new ImageIcon("icons/chicken.png")
         };
 
 
@@ -172,6 +208,8 @@ public class RetroFastFoodGUI {
         orderDetailsArea = new JTextArea(10, 40);
         orderDetailsArea.setEditable(false);
         orderDetailsArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        orderDetailsArea.setBackground(Color.BLACK); // Fondo negro
+        orderDetailsArea.setForeground(Color.GREEN); // Letras verdes
         JScrollPane scrollPane = new JScrollPane(orderDetailsArea);
 
         // Add menu buttons
@@ -209,6 +247,7 @@ public class RetroFastFoodGUI {
         // Add components to bottom panel
         bottomPanel.add(totalLabel, BorderLayout.NORTH);
         bottomPanel.add(finishButton, BorderLayout.CENTER);
+        bottomPanel.add(undoButton, BorderLayout.EAST); // Añadir el botón de deshacer
         bottomPanel.add(scrollPane, BorderLayout.SOUTH); // Add scrollpane with textarea
 
         // Add components to frame
@@ -223,12 +262,12 @@ public class RetroFastFoodGUI {
     private static void updateOrderDetails() {
         // Clear previous content
         orderDetailsArea.setText("");
-        
+
         // Add each item to the TextArea
         for (String item : orderItems) {
             orderDetailsArea.append(item + "\n");
         }
-        
+
         // Add total at the end
         orderDetailsArea.append("\n" + String.format("Total: $%.2f", total));
     }
@@ -255,7 +294,7 @@ public class RetroFastFoodGUI {
     // Save order to file
     private static void saveOrder(JFrame parent) {
         if (orderItems.isEmpty()) {
-            JOptionPane.showMessageDialog(parent, "No hay pedido para guardar.", 
+            JOptionPane.showMessageDialog(parent, "No hay pedido para guardar.",
                 "Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -266,7 +305,7 @@ public class RetroFastFoodGUI {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            
+
             // Ensure file has .txt extension
             if (!fileToSave.getName().toLowerCase().endsWith(".txt")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
@@ -280,10 +319,10 @@ public class RetroFastFoodGUI {
                 // Write total
                 writer.println(String.format("Total: $%.2f", total));
 
-                JOptionPane.showMessageDialog(parent, "Pedido guardado exitosamente.", 
+                JOptionPane.showMessageDialog(parent, "Pedido guardado exitosamente.",
                     "Guardado", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(parent, "Error al guardar el pedido: " + ex.getMessage(), 
+                JOptionPane.showMessageDialog(parent, "Error al guardar el pedido: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -313,7 +352,7 @@ public class RetroFastFoodGUI {
                         try {
                             total = Double.parseDouble(line.split(":")[1].trim().replace("$", ""));
                         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                            JOptionPane.showMessageDialog(parent, "Error al leer el total.", 
+                            JOptionPane.showMessageDialog(parent, "Error al leer el total.",
                                 "Error", JOptionPane.ERROR_MESSAGE);
                         }
                         break;
@@ -327,10 +366,10 @@ public class RetroFastFoodGUI {
                 updateOrderDetails();
                 totalLabel.setText(String.format("Total: $%.2f", total));
 
-                JOptionPane.showMessageDialog(parent, "Pedido cargado exitosamente.", 
+                JOptionPane.showMessageDialog(parent, "Pedido cargado exitosamente.",
                     "Cargado", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(parent, "Error al cargar el pedido: " + ex.getMessage(), 
+                JOptionPane.showMessageDialog(parent, "Error al cargar el pedido: " + ex.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
